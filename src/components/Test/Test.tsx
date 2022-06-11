@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import illustration from '../../static/images/signup-illustration.png';
 import GoogleImage from '../../static/images/google.png';
+import MenuSpring from 'components/Spring/MenuSpring';
 type UserSubmitForm = {
   fullname: string;
   username: string;
@@ -46,6 +47,7 @@ function Test() {
 
   return (
     <div className="register-form">
+      <MenuSpring />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="form-group">
           <label>Full Name</label>
