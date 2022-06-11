@@ -9,7 +9,7 @@ import Cart from 'components/Cart';
 import { useProducts } from 'contexts/products-context';
 
 import * as S from './style';
-
+//home
 function Home() {
   const { isFetching, products, fetchProducts } = useProducts();
 
