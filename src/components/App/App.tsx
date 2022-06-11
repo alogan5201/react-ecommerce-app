@@ -1,39 +1,39 @@
-import { useEffect } from 'react';
-
-import Loader from 'components/Loader';
-import { GithubCorner, GithubStarButton } from 'components/Github';
-import Filter from 'components/Filter';
-import Products from 'components/Products';
-import Cart from 'components/Cart';
-
-import { useProducts } from 'contexts/products-context';
-
 import * as S from './style';
-
+import Navbar from 'components/Navbar';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from 'components/Home';
+import Test from 'components/Test';
+import SignInModal from 'components/Modal/SignInModal';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from 'services/firebase';
+import Register from 'components/Register/Register';
 function App() {
-  const { isFetching, products, fetchProducts } = useProducts();
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
-
+  const [user, loading, error] = useAuthState(auth);
+  if (loading) {
+    return (
+      <div
+        className="px-4 py-5 my-5 text-center row"
+        style={{ height: '88vh', alignContent: 'center' }}
+      >
+        <div className="col-lg-6 mx-auto">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
-    <S.Container>
-      {isFetching && <Loader />}
-      <GithubCorner />
-      <S.TwoColumnGrid>
-        <S.Side>
-          <Filter />
-          <GithubStarButton />
-        </S.Side>
-        <S.Main>
-          <S.MainHeader>
-            <p>{products?.length} Product(s) found</p>
-          </S.MainHeader>
-          <Products products={products} />
-        </S.Main>
-      </S.TwoColumnGrid>
-      <Cart />
+    <S.Container className="test">
+      <BrowserRouter>
+        <Navbar />
+        <SignInModal />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="test" element={<Test />} />
+          <Route path="register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
     </S.Container>
   );
 }

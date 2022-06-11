@@ -29,3 +29,16 @@ export interface IGetProductsResponse {
     products: IProduct[];
   };
 }
+
+export interface IUser {
+  email: string;
+  photoURL: string;
+  emailVerified: boolean;
+  uid: string;
+}
+
+export interface IGetUserResponse {
+
+  user: IUser[];
+
+}

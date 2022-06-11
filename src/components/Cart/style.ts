@@ -10,7 +10,7 @@ export const CartButton = styled.button`
   text-align: center;
   line-height: 50px;
   position: absolute;
-  top: 0;
+  top: 10%;
   left: 0;
   cursor: pointer;
   z-index: 2;
@@ -42,11 +42,11 @@ export const Container = styled.div<IContainer>`
   ${CartButton} {
     left: ${({ isOpen }) => (isOpen ? '0' : '-50px')};
     background-color: ${({ theme, isOpen }) =>
-      isOpen ? theme.colors.black : theme.colors.primary};
+    isOpen ? theme.colors.black : theme.colors.primary};
   }
 
   @media only screen and (min-width: ${({ theme: { breakpoints } }) =>
-      breakpoints.tablet}) {
+    breakpoints.tablet}) {
     width: 450px;
     right: ${({ isOpen }) => (isOpen ? '0' : '-450px')};
 
