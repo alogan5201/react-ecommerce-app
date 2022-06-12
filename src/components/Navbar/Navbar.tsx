@@ -1,14 +1,17 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaUserAlt } from 'react-icons/fa';
-import { auth } from 'services/firebase';
+import { FaUserAlt } from 'react-icons/fa';
+import { auth, signInWithGoogle } from 'services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import MenuSpring from 'components/Spring/MenuSpring';
 import { signOutWithGoogle } from 'services/firebase';
 import { MdOutlineShoppingBag, MdMenu } from 'react-icons/md';
 import { useMedia } from 'react-use';
-import MobileNav from 'components/HamburgerBtn/MobileNav';
-//MdOutlineShoppingBag
+import { useSpring, animated, config } from '@react-spring/web';
+import styles from './styles.module.css';
+import { FaShoppingBag } from 'react-icons/fa';
+
+// FaShoppingBag
 const style = {
   ':active': {
     opacity: 0,
@@ -24,30 +27,48 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const [user, loading, error] = useAuthState(auth);
   const isLg = useMedia('(min-width: 992px)');
+
+  const [{ background }] = useSpring(
+    () => ({
+      delay: 50,
+      from: {
+        background: 'var(--from, #212529)',
+      },
+      to: {
+        background: 'var(--to, #000)',
+      },
+      config: config.molasses,
+    }),
+    []
+  );
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <animated.div
+        className="navbar navbar-expand-lg "
+        style={open ? { background } : { background: '#212529' }}
+      >
         <div className="container-fluid">
-          <button
-            className=" border-0 bg-dark text-secondary d-lg-none"
+          <animated.button
+            className=" border-0   d-lg-none text-white text-opacity-50"
             type="button"
+            style={open ? { background } : { background: '#212529' }}
           >
-            <MdOutlineShoppingBag size={23} />
-          </button>
-          <Link className="navbar-brand" to="/">
+            <MdOutlineShoppingBag size={32} />
+          </animated.button>
+          <Link className="navbar-brand text-white fw-bolder " to="/">
             iStore
           </Link>
 
-          <button
+          <animated.button
             onClick={() => setOpen(!open)}
-            className=" second-button py-2  border-0 bg-dark text-secondary d-lg-none"
+            className=" second-button py-2  border-0 text-white text-opacity-5 d-lg-none"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
-            style={{ paddingRight: '6px' }}
+            style={open ? { background } : { background: '#212529' }}
           >
             <div className={open ? 'animated-icon2 open' : 'animated-icon2'}>
               <span />
@@ -55,12 +76,12 @@ function Navbar() {
               <span />
               <span />
             </div>
-          </button>
+          </animated.button>
 
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <form role="search" className=" d-sm-flex d-lg-none">
+            <form role="search" className=" d-sm-flex d-lg-none ">
               <input
-                className="form-control  "
+                className="form-control bg-dark text-white border-dark"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
@@ -68,26 +89,44 @@ function Navbar() {
             </form>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="test">
+                <Link
+                  className=" btn btn-link nav-link text-white text-start"
+                  aria-current="page"
+                  to="test"
+                >
                   Test
                 </Link>
               </li>
 
-              <li className="nav-item"></li>
+              <li className="nav-item ">
+                <button className="btn btn-link nav-link  text-white d-sm-block d-lg-none ">
+                  {' '}
+                  Account
+                </button>
+              </li>
+              <li className="nav-item ">
+                <button
+                  className="btn btn-link nav-link  text-white d-sm-block d-lg-none "
+                  onClick={signOutWithGoogle}
+                >
+                  {' '}
+                  Sign out
+                </button>
+              </li>
             </ul>
 
-            <div className="d-flex w-100 justify-content-end ">
+            <div className="d-flex w-100 justify-content-end   text-white text-opacity-50 ">
               <MenuSpring />
               <button
-                className="btn btn-dark text-secondary d-md-none d-lg-block "
+                className="btn btn-dark  text-white text-opacity-50 d-sm-none d-lg-block "
                 type="button"
               >
-                <MdOutlineShoppingBag size={23} />
+                <MdOutlineShoppingBag size={32} />
               </button>
               {user ? (
-                <div className="dropdown d-md-none d-lg-block">
+                <div className="dropdown d-sm-none d-lg-block text-white text-opacity-50">
                   <button
-                    className="btn btn-dark dropdown-toggle  text-secondary profile-dropdown"
+                    className=" dropdown-toggle  btn profile-dropdown btn-dark d-sm-none d-sm-none d-lg-block text-white text-opacity-50"
                     type="button"
                     id="dropdownMenuButton1"
                     data-bs-toggle="dropdown"
@@ -108,22 +147,35 @@ function Navbar() {
                     className="dropdown-menu dropdown-menu-end"
                     aria-labelledby="dropdownMenuButton1"
                   >
-                    <li>
-                      <button className="dropdown-item">Account</button>
-                    </li>
-                    <li>
-                      <button
-                        className="dropdown-item "
-                        onClick={signOutWithGoogle}
-                      >
-                        Sign out
-                      </button>
-                    </li>
+                    {user ? (
+                      <>
+                        <li>
+                          <button className="dropdown-item">Account</button>
+                        </li>
+                        <li>
+                          <button
+                            className="dropdown-item "
+                            onClick={signOutWithGoogle}
+                          >
+                            Sign out
+                          </button>
+                        </li>{' '}
+                      </>
+                    ) : (
+                      <li>
+                        <button
+                          className="dropdown-item "
+                          onClick={signInWithGoogle}
+                        >
+                          Login in
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 </div>
               ) : (
                 <button
-                  className="btn profile-dropdown btn-dark d-md-none d-md-none d-lg-block text-secondary"
+                  className="btn profile-dropdown btn-dark d-sm-none d-sm-none d-lg-block text-white"
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#signinModal"
@@ -134,7 +186,7 @@ function Navbar() {
             </div>
           </div>
         </div>
-      </nav>
+      </animated.div>
     </div>
   );
 }

@@ -172,3 +172,10 @@
   top: 21px;
   left: 8px;
 }
+.form-control,
+.form-control:focus,
+.form-control:focus-within {
+  border: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}

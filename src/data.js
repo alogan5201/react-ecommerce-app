@@ -1,6 +1,1 @@
-export const menuList = [
-  'Lorem ipsum dolor',
-  'Quisque vel odio vulputate',
-  'Etiam quis justo maximus',
-  'Vivamus vulputate leo venenatis',
-];
+export const menuList = ['Laptops', 'Desktops', 'Mobile Devices', 'Tablets'];

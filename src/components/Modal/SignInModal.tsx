@@ -118,13 +118,13 @@ function SignInModal() {
                                   id="form2Example3"
                                 />
                                 <label
-                                  className="form-check-label"
+                                  className="form-check-label text-dark"
                                   htmlFor="form2Example3"
                                 >
                                   Remember me
                                 </label>
                               </div>
-                              <button className="text-body">
+                              <button className="text-body btn btn-link  ">
                                 Forgot password?
                               </button>
                             </div>

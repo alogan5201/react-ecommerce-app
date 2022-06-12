@@ -1,44 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-import { XCircle as XIcon } from 'react-feather';
 import { Search } from 'react-feather';
 import {
   animated,
-  useSpring,
-  useSprings,
   useChain,
+  useSpring,
   useSpringRef,
-  useTransition,
+  useSprings,
 } from 'react-spring';
 
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'styled-components';
 
-import { Box, Container, Heading, Flex, theme } from '../../ui';
+import { Box, Container, Flex, theme } from '../../ui';
 
-import '../../ui/molecules/global-styles/global.css';
 import { BsXCircle } from 'react-icons/bs';
+import { MdSearch } from 'react-icons/md';
 import { menuList } from '../../data';
+import '../../ui/molecules/global-styles/global.css';
 
-function SearchBar() {
-  const searchBarStyle = useSpring({
-    to: [{ opacity: 1 }, { opacity: 0 }],
-    from: { opacity: 0 },
-  });
-  // ...
-  return (
-    <animated.div style={searchBarStyle}>
-      {' '}
-      <form role="search" className="mx-auto">
-        <input
-          className="form-control me-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-      </form>
-    </animated.div>
-  );
-}
 const blue = theme.colors.brand;
 const orange = theme.colors.bg200;
 
@@ -81,9 +60,11 @@ const menuItemHeight = 60;
 const MenuItem = styled(animated(Flex))`
   box-sizing: border-box;
   cursor: pointer;
+  color: #000;
+  font-weight: 400;
   transition: color 0.2s;
   :hover {
-    color: blue;
+    color: #0d6efd;
   }
   :last-child {
     border-bottom: none;
@@ -105,6 +86,10 @@ function MenuSpring() {
   const springRef = useSpringRef();
   const searchHeaderStyles = useSpring({ opacity: open ? 1 : 0 });
 
+  const handleMenuClick = (e) => {
+    e.preventDefault();
+    console.log('🚀 ~ e', e.target.innerText);
+  };
   const {
     background,
     iconTransform,
@@ -151,7 +136,7 @@ function MenuSpring() {
   );
 
   return (
-    <Box bg="bg100" className="p-0 w-100 d-md-none d-lg-block">
+    <Box bg="bg100" className=" w-100 d-sm-none d-lg-block pt-1">
       <Container className="p-0">
         <MenuBar
           style={{ background }}
@@ -166,11 +151,11 @@ function MenuSpring() {
             >
               <div className="input-group">
                 <span
-                  className="input-group-text bg-dark  border-0 pe-2 text-secondary"
+                  className="btn btn-dark text-light text-opacity-50 d-sm-none d-lg-block "
                   id="basic-addon1"
                 >
                   {' '}
-                  <Search size={26} />
+                  <MdSearch size={30} />
                 </span>
                 <input
                   className="form-control me-2 bg-dark border-0 ps-0 text-white border-0"
@@ -181,11 +166,11 @@ function MenuSpring() {
                 />
                 <span
                   onClick={() => setOpen(!open)}
-                  className="input-group-text bg-dark  border-0 pe-2 text-secondary"
+                  className="input-group-text bg-dark  border-0 pe-2 text-white text-opacity-75"
                   id="basic-addon1"
                 >
                   {' '}
-                  <BsXCircle size={26} />
+                  <BsXCircle size={30} />
                 </span>
               </div>
             </form>
@@ -195,9 +180,9 @@ function MenuSpring() {
             onClick={() => setOpen(!open)}
             height={36}
             style={{ transform: iconTransform, opacity: iconOpacity }}
-            className="animated-box text-secondary"
+            className="animated-box text-white text-opacity-50"
           >
-            <Search size={26} />
+            <MdSearch size={35} />
           </AnimatedBox>
         </MenuBar>
         <Menu
@@ -206,7 +191,8 @@ function MenuSpring() {
         >
           {springs.map(({ x, ...props }, i) => (
             <MenuItem
-              className="justify-content-start"
+              onClick={handleMenuClick}
+              className="justify-content-start item"
               key={i}
               style={{
                 transform: x.to((x) => `translateX(${x})`),
