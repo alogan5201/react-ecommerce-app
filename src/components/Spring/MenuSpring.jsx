@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
 import { XCircle as XIcon } from 'react-feather';
+import { Search } from 'react-feather';
 import {
   animated,
   useSpring,
   useSprings,
   useChain,
   useSpringRef,
+  useTransition,
 } from 'react-spring';
 
 import styled, { ThemeProvider } from 'styled-components';
@@ -14,9 +16,29 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Box, Container, Heading, Flex, theme } from '../../ui';
 
 import '../../ui/molecules/global-styles/global.css';
+import { BsXCircle } from 'react-icons/bs';
+import { menuList } from '../../data';
 
-import { menuList, loremList } from '../../data';
-
+function SearchBar() {
+  const searchBarStyle = useSpring({
+    to: [{ opacity: 1 }, { opacity: 0 }],
+    from: { opacity: 0 },
+  });
+  // ...
+  return (
+    <animated.div style={searchBarStyle}>
+      {' '}
+      <form role="search" className="mx-auto">
+        <input
+          className="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+      </form>
+    </animated.div>
+  );
+}
 const blue = theme.colors.brand;
 const orange = theme.colors.bg200;
 
@@ -74,22 +96,32 @@ MenuItem.defaultProps = {
   alignItems: 'center',
   justifyContent: 'center',
   borderBottom: '2px solid',
-  borderColor: 'bg100',
+  borderColor: '#545469',
 };
 
 function MenuSpring() {
   const [open, setOpen] = useState(false);
 
   const springRef = useSpringRef();
-  const { background, iconTransform, ...springProps } = useSpring({
+  const searchHeaderStyles = useSpring({ opacity: open ? 1 : 0 });
+
+  const {
+    background,
+    iconTransform,
+    iconOpacity,
+
+    ...springProps
+  } = useSpring({
     ref: springRef,
-    background: open ? blue : orange,
-    iconTransform: open ? 'rotate(0deg)' : 'rotate(-45deg)',
+    background: 'rgb(33, 37, 41)',
+    iconOpacity: open ? 0 : 1,
+
+    iconTransform: open ? 'rotate(0deg)' : 'rotate(0deg)',
     height: open ? `${menuItemHeight * menuList.length}px` : '0px',
     from: {
-      background: orange,
-      iconTransform: 'rotate(-45deg)',
+      iconTransform: 'rotate(0deg)',
       height: '0px',
+      opacity: 1,
     },
   });
 
@@ -104,6 +136,7 @@ function MenuSpring() {
         ? i * delayValue
         : menuList.length * delayValue - i * delayValue,
       opacity: open ? 1 : 0,
+      width: '492px',
       x: open ? '0%' : '-100%',
       from: {
         opacity: 0,
@@ -118,40 +151,75 @@ function MenuSpring() {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box bg="bg100" minHeight="100vh" py={1}>
-        <Container>
-          <Heading textAlign="center">React Spring Example - useChain</Heading>
-          <MenuBar onClick={() => setOpen(!open)} style={{ background }}>
-            <AnimatedBox height={36} style={{ transform: iconTransform }}>
-              <XIcon size={36} />
-            </AnimatedBox>
-            <Box pl={2}>Menu</Box>
-          </MenuBar>
-          <Menu style={springProps}>
-            {springs.map(({ x, ...props }, i) => (
-              <MenuItem
-                key={i}
-                style={{
-                  transform: x.to((x) => `translateX(${x})`),
-                  ...props,
-                }}
-              >
-                {props.item}
-              </MenuItem>
-            ))}
-          </Menu>
-          <Box>
-            <Heading as="h2">{loremList[0]}</Heading>
-            <ul>
-              {loremList.map((item, i) => (
-                <li key={i}>{item}</li>
-              ))}
-            </ul>
-          </Box>
-        </Container>
-      </Box>
-    </ThemeProvider>
+    <Box bg="bg100" className="p-0 w-100 d-md-none d-lg-block">
+      <Container className="p-0">
+        <MenuBar
+          style={{ background }}
+          className="justify-content-end p-0 position-relative"
+        >
+          <animated.div style={searchHeaderStyles} className="col">
+            {' '}
+            <form
+              role="search"
+              className="me-auto"
+              style={{ maxWidth: '500px' }}
+            >
+              <div className="input-group">
+                <span
+                  className="input-group-text bg-dark  border-0 pe-2 text-secondary"
+                  id="basic-addon1"
+                >
+                  {' '}
+                  <Search size={26} />
+                </span>
+                <input
+                  className="form-control me-2 bg-dark border-0 ps-0 text-white border-0"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  aria-describedby="basic-addon1"
+                />
+                <span
+                  onClick={() => setOpen(!open)}
+                  className="input-group-text bg-dark  border-0 pe-2 text-secondary"
+                  id="basic-addon1"
+                >
+                  {' '}
+                  <BsXCircle size={26} />
+                </span>
+              </div>
+            </form>
+          </animated.div>
+
+          <AnimatedBox
+            onClick={() => setOpen(!open)}
+            height={36}
+            style={{ transform: iconTransform, opacity: iconOpacity }}
+            className="animated-box text-secondary"
+          >
+            <Search size={26} />
+          </AnimatedBox>
+        </MenuBar>
+        <Menu
+          style={springProps}
+          className="position-absolute searchbar-menu rounded-bottom"
+        >
+          {springs.map(({ x, ...props }, i) => (
+            <MenuItem
+              className="justify-content-start"
+              key={i}
+              style={{
+                transform: x.to((x) => `translateX(${x})`),
+
+                ...props,
+              }}
+            >
+              {props.item}
+            </MenuItem>
+          ))}
+        </Menu>
+      </Container>
+    </Box>
   );
 }
 

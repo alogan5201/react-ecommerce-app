@@ -1,10 +1,12 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import illustration from '../../static/images/signup-illustration.png';
-import GoogleImage from '../../static/images/google.png';
 import MenuSpring from 'components/Spring/MenuSpring';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
+import Transition from 'components/Spring/Transition';
+
+import Header from 'components/HamburgerBtn/Header';
+import MobileNav from 'components/HamburgerBtn/MobileNav';
+//Module '"components/Spring/Transition"' has no exported member 'Transition'. Did you mean to use 'import Transition from "components/Spring/Transition"' instead?
 type UserSubmitForm = {
   fullname: string;
   username: string;
@@ -46,89 +48,14 @@ function Test() {
   };
 
   return (
-    <div className="register-form">
-      <MenuSpring />
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="form-group">
-          <label>Full Name</label>
-          <input
-            type="text"
-            {...register('fullname')}
-            className={`form-control ${errors.fullname ? 'is-invalid' : ''}`}
-          />
-          <div className="invalid-feedback">{errors.fullname?.message}</div>
-        </div>
-
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            type="text"
-            {...register('username')}
-            className={`form-control ${errors.username ? 'is-invalid' : ''}`}
-          />
-          <div className="invalid-feedback">{errors.username?.message}</div>
-        </div>
-
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="text"
-            {...register('email')}
-            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-          />
-          <div className="invalid-feedback">{errors.email?.message}</div>
-        </div>
-
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            type="password"
-            {...register('password')}
-            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-          />
-          <div className="invalid-feedback">{errors.password?.message}</div>
-        </div>
-        <div className="form-group">
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            {...register('confirmPassword')}
-            className={`form-control ${
-              errors.confirmPassword ? 'is-invalid' : ''
-            }`}
-          />
-          <div className="invalid-feedback">
-            {errors.confirmPassword?.message}
-          </div>
-        </div>
-
-        <div className="form-group form-check">
-          <input
-            type="checkbox"
-            {...register('acceptTerms')}
-            className={`form-check-input ${
-              errors.acceptTerms ? 'is-invalid' : ''
-            }`}
-          />
-          <label htmlFor="acceptTerms" className="form-check-label">
-            I have read and agree to the Terms
-          </label>
-          <div className="invalid-feedback">{errors.acceptTerms?.message}</div>
-        </div>
-
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">
-            Register
-          </button>
-          <button
-            type="button"
-            onClick={() => reset()}
-            className="btn btn-warning float-right"
-          >
-            Reset
-          </button>
-        </div>
-      </form>
+    <div
+      className="register-form "
+      style={{ height: 500, width: '100vw', backgroundColor: 'red' }}
+    >
+      <div className="row">
+        <div className="col-12 position-relative"></div>
+        <div style={{ maxWidth: '682px' }} className="text-center"></div>
+      </div>
     </div>
   );
 }

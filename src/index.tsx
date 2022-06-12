@@ -11,7 +11,7 @@ import { ProductsProvider } from 'contexts/products-context';
 import { CartProvider } from 'contexts/cart-context';
 
 import App from 'components/App';
-
+import './styles.css';
 const root = document.getElementById('root')!;
 const container = ReactDOMClient.createRoot(root);
 

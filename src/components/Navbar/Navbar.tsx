@@ -1,81 +1,93 @@
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaUserAlt } from 'react-icons/fa';
 import { auth } from 'services/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import MenuSpring from 'components/Spring/MenuSpring';
 import { signOutWithGoogle } from 'services/firebase';
+import { MdOutlineShoppingBag, MdMenu } from 'react-icons/md';
+import { useMedia } from 'react-use';
+import MobileNav from 'components/HamburgerBtn/MobileNav';
+//MdOutlineShoppingBag
 const style = {
   ':active': {
     opacity: 0,
   },
 };
+const Demo = () => {
+  const isLg = useMedia('(min-width: 992px)');
+  const isMd = useMedia('(min-width: 768px)');
+  const isSm = useMedia('(min-width: 576px)');
+  return <div> {isLg ? 'Yes' : 'No'}</div>;
+};
 function Navbar() {
+  const [open, setOpen] = useState(false);
   const [user, loading, error] = useAuthState(auth);
+  const isLg = useMedia('(min-width: 992px)');
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-light">
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
+          <button
+            className=" border-0 bg-dark text-secondary d-lg-none"
+            type="button"
+          >
+            <MdOutlineShoppingBag size={23} />
+          </button>
           <Link className="navbar-brand" to="/">
             iStore
           </Link>
 
           <button
-            className="navbar-toggler"
+            onClick={() => setOpen(!open)}
+            className=" second-button py-2  border-0 bg-dark text-secondary d-lg-none"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation"
+            style={{ paddingRight: '6px' }}
           >
-            <span className="navbar-toggler-icon" />
+            <div className={open ? 'animated-icon2 open' : 'animated-icon2'}>
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
           </button>
+
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <form role="search" className=" d-sm-flex d-lg-none">
+              <input
+                className="form-control  "
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+            </form>
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="test">
                   Test
                 </Link>
               </li>
-              <li className="nav-item">
-                <div className="nav-link">Link</div>
-              </li>
-              <li className="nav-item dropdown">
-                <div
-                  className="nav-link dropdown-toggle"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </div>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <div className="dropdown-item">Action</div>
-                  </li>
-                  <li>
-                    <div className="dropdown-item">Another action</div>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <div className="dropdown-item">Something else here</div>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <div className="nav-link disabled">Disabled</div>
-              </li>
+
+              <li className="nav-item"></li>
             </ul>
-            <form className="d-flex">
-              <button className="btn" type="button">
-                <FaShoppingCart />
+
+            <div className="d-flex w-100 justify-content-end ">
+              <MenuSpring />
+              <button
+                className="btn btn-dark text-secondary d-md-none d-lg-block "
+                type="button"
+              >
+                <MdOutlineShoppingBag size={23} />
               </button>
               {user ? (
-                <div className="dropdown">
+                <div className="dropdown d-md-none d-lg-block">
                   <button
-                    className="btn btn-light dropdown-toggle profile-dropdown"
+                    className="btn btn-dark dropdown-toggle  text-secondary profile-dropdown"
                     type="button"
                     id="dropdownMenuButton1"
                     data-bs-toggle="dropdown"
@@ -101,7 +113,7 @@ function Navbar() {
                     </li>
                     <li>
                       <button
-                        className="dropdown-item"
+                        className="dropdown-item "
                         onClick={signOutWithGoogle}
                       >
                         Sign out
@@ -111,7 +123,7 @@ function Navbar() {
                 </div>
               ) : (
                 <button
-                  className="btn profile-dropdown btn-light"
+                  className="btn profile-dropdown btn-dark d-md-none d-md-none d-lg-block text-secondary"
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#signinModal"
@@ -119,7 +131,7 @@ function Navbar() {
                   <FaUserAlt />
                 </button>
               )}
-            </form>
+            </div>
           </div>
         </div>
       </nav>
